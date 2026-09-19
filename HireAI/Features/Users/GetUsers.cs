@@ -83,7 +83,7 @@ public sealed class GetUsers
                     Result<PagedList<Response>> result = await handler.Handle(query, cancellationToken);
 
                     return result.Match(Results.Ok, CustomeResults.Problem);
-                })
+                }).RequireAuthorization()
             .WithTags(Tags.Users);
             }
         }

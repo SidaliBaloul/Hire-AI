@@ -1,4 +1,6 @@
-﻿namespace HireAI.Common;
+﻿using Microsoft.EntityFrameworkCore.Storage.Json;
+
+namespace HireAI.Common;
 
 public class Error
 {
@@ -31,6 +33,11 @@ public class Error
     public static Error NotFound(string code, string description)
     {
         return new Error(code, description, ErrorType.NotFound);
+    }
+
+    public static Error Failure(string code, string description)
+    {
+        return new Error(code, description, ErrorType.Failure);
     }
         
 }

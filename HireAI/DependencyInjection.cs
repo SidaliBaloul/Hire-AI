@@ -1,13 +1,15 @@
-﻿using HireAI.Common.Messaging;
-using HireAI.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
-using HireAI.Common.Behaviors;
+﻿using System.Text;
 using FluentValidation;
 using HireAI.Authentication;
+using HireAI.Authorization;
+using HireAI.Common.Behaviors;
+using HireAI.Common.Messaging;
+using HireAI.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace HireAI;
 
@@ -50,7 +52,8 @@ public static class DependencyInjection
        this IServiceCollection services,
        IConfiguration configuration) =>
        services.AddDatabase(configuration)
-       .AddAuthenticationInternal(configuration);
+       .AddAuthenticationInternal(configuration)
+       .AddAuthorizationInternal();
 
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -86,6 +89,19 @@ public static class DependencyInjection
         services.AddScoped<IUserContext, UserContext>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<ITokenProvider, TokenProvider>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
+    {
+        services.AddAuthorization();
+
+        services.AddScoped<PermissionProvider>();
+
+        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         return services;
     }

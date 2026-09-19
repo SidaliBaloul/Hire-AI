@@ -81,7 +81,8 @@ public static class Login
 
                 return result.Match(Results.Ok, CustomeResults.Problem);
 
-            }).WithTags(Tags.Users);
+            }).WithTags(Tags.Users)
+            .RequireRateLimiting(RateLimitingPolicies.Authentication);
         }
     }
 }

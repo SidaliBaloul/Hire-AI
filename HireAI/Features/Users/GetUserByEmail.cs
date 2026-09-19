@@ -1,9 +1,11 @@
-﻿using HireAI.Common;
+﻿using HireAI.Authentication;
+using HireAI.Common;
 using HireAI.Common.Endpoints;
 using HireAI.Common.Extensions;
 using HireAI.Common.Messaging;
 using HireAI.Database;
 using Microsoft.EntityFrameworkCore;
+using HireAI.Authorization;
 
 namespace HireAI.Features.Users;
 
@@ -20,7 +22,7 @@ public sealed class GetUserByEmail
         public string Email { get; set; }
     }
 
-    public sealed class Handler(ApplicationDbContext applicationDbContext) : IQueryHandler<Query, Response>
+    public sealed class Handler(ApplicationDbContext applicationDbContext, IUserContext userContext) : IQueryHandler<Query, Response>
     {
         public async Task<Result<Response>> Handle(Query query, CancellationToken cancellationToken)
         {
@@ -31,6 +33,11 @@ public sealed class GetUserByEmail
             if(response is null)
             {
                 return Result.Failure<Response>(UserErrors.EmailNotFound);
+            }
+
+            if (response.Id != userContext.UserId())
+            {
+                return Result.Failure<Response>(UserErrors.Unauthorized());
             }
 
             return response;
@@ -52,7 +59,9 @@ public sealed class GetUserByEmail
 
                 return response.Match(Results.Ok, CustomeResults.Problem);
 
-            }).WithTags(Tags.Users);
+            }).WithTags(Tags.Users)
+                .RequireAuthorization();
+                
         }
     }
 }
