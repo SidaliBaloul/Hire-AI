@@ -1,0 +1,6 @@
+@HireAI_HostAddress = http://localhost:5271
+
+GET {{HireAI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
