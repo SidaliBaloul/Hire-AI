@@ -4,6 +4,7 @@ using HireAI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HireAI.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260919214220_addCandidates")]
+    partial class addCandidates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,22 +74,6 @@ namespace HireAI.Database.Migrations
                     b.HasIndex("CandidateId");
 
                     b.ToTable("CandidatesExperiences");
-                });
-
-            modelBuilder.Entity("HireAI.Features.Candidates.CandidateLanguage", b =>
-                {
-                    b.Property<Guid>("CandidateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Level")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CandidateId", "Language");
-
-                    b.ToTable("CandidatesLanguages");
                 });
 
             modelBuilder.Entity("HireAI.Features.Candidates.CandidateSkill", b =>
@@ -172,17 +159,6 @@ namespace HireAI.Database.Migrations
                     b.Navigation("Candidate");
                 });
 
-            modelBuilder.Entity("HireAI.Features.Candidates.CandidateLanguage", b =>
-                {
-                    b.HasOne("HireAI.Features.Candidates.Candidate", "Candidate")
-                        .WithMany("Languages")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Candidate");
-                });
-
             modelBuilder.Entity("HireAI.Features.Candidates.CandidateSkill", b =>
                 {
                     b.HasOne("HireAI.Features.Candidates.Candidate", "Candidate")
@@ -208,8 +184,6 @@ namespace HireAI.Database.Migrations
             modelBuilder.Entity("HireAI.Features.Candidates.Candidate", b =>
                 {
                     b.Navigation("Experiences");
-
-                    b.Navigation("Languages");
 
                     b.Navigation("Skills");
                 });

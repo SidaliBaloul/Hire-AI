@@ -5,6 +5,7 @@ using HireAI.Authorization;
 using HireAI.Common.Behaviors;
 using HireAI.Common.Messaging;
 using HireAI.Database;
+using HireAI.Features.Candidates;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,10 @@ public static class DependencyInjection
 
         services.Decorate(typeof(ICommandHandler<,>), typeof(ValidationDecorator.CommandHandler<,>));
         services.Decorate(typeof(ICommandHandler<>), typeof(ValidationDecorator.CommandBaseHandler<>));
+
+        services.AddScoped<IResumeParser, OpenAIResumeParser>();
+        services.AddScoped<IPdfTextExtractor, PdfTextExtractor>();
+        services.AddScoped<ICandidateMatcher, OpenAICandidateMatcher>();
 
 
 

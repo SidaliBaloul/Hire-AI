@@ -22,6 +22,8 @@
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Include="Microsoft.OpenApi" />
+	  <PackageReference Include="OpenAI" />
+	  <PackageReference Include="PdfPig" />
 	  <PackageReference Include="Scalar.AspNetCore" />
 	  <PackageReference Include="Scalar.AspNetCore.Microsoft" />
 	  <PackageReference Include="Scrutor" />
@@ -33,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Companies\" />
-    <Folder Include="Features\Candidates\" />
   </ItemGroup>
 
 </Project>

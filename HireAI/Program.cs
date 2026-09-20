@@ -10,6 +10,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+//builder.Services.AddAntiforgery();
 
 //builder.Services.AddOpenApiWithAuth();
 
@@ -69,6 +70,8 @@ app.UseAuthentication();
 app.UseRateLimiter();
 
 app.UseAuthorization();
+
+//app.UseAntiforgery();
 
 app.MapEndpoints();
 
