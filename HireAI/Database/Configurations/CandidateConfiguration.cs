@@ -15,6 +15,10 @@ internal sealed class CandidateConfiguration
             .WithOne(x => x.Candidate)
             .HasForeignKey(x => x.CandidateId);
 
+        builder.HasOne(x => x.User)
+            .WithMany(x => x.Cadidates)
+            .HasForeignKey(x => x.userId);
+
         builder.HasMany(x => x.Experiences)
             .WithOne(x => x.Candidate)
             .HasForeignKey(x => x.CandidateId);

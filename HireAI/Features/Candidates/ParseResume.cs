@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using HireAI.Authentication;
 using HireAI.Common;
 using HireAI.Common.Endpoints;
 using HireAI.Common.Extensions;
@@ -28,7 +29,7 @@ public static class ParseResume
         }
     }
 
-    public sealed class Handler(IResumeParser resumeParser, IPdfTextExtractor pdfTextExtractor, ApplicationDbContext applicationDbContext)
+    public sealed class Handler(IResumeParser resumeParser, IPdfTextExtractor pdfTextExtractor, IUserContext userContext, ApplicationDbContext applicationDbContext)
         : ICommandHandler<Command, Guid>
     {
         public async Task<Result<Guid>> Handle(Command command, CancellationToken cancellationToken)
@@ -47,6 +48,7 @@ public static class ParseResume
             Candidate candidate = new()
             {
                 Id = candidateId,
+                userId = userContext.UserId(),
                 FullName = result.FullName,
                 Email = result.Email,
                 Phone = result.Phone,
@@ -93,8 +95,9 @@ public static class ParseResume
 
                 Result<Guid> result = await handler.Handle(command, cancellationToken);
 
-                return result.Match(Results.Ok,CustomeResults.Problem);
-            }).DisableAntiforgery();
+                return result.Match(Results.Ok, CustomeResults.Problem);
+
+            }).DisableAntiforgery().WithTags(Tags.Candidates).RequireAuthorization();
         }
     }
 }

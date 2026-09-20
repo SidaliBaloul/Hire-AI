@@ -66,7 +66,7 @@ public static class MatchCandidate
                 Result<MatchResult> result = await handler.Handle(command, cancellationToken);
 
                 return result.Match(Results.Ok, CustomeResults.Problem);
-            });
+            }).WithTags(Tags.Candidates).RequireAuthorization();
         }
     }
 
