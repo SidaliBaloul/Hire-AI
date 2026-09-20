@@ -63,6 +63,8 @@ if (app.Environment.IsDevelopment())
     //app.ApplyMigrations();
 }
 
+app.UseSecurityHeaders();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
